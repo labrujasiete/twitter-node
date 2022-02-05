@@ -82,7 +82,6 @@ $(document).on("click", ".likeButton", function(event){
 $(document).on("click", ".retweetButton", function(event){
     var button = $(event.target)
     var postId = getPostIdFromElement(button);
-    console.log(postId);//<-------------------LOG
     if(postId === undefined){
         return 
     }
@@ -91,7 +90,6 @@ $(document).on("click", ".retweetButton", function(event){
         url: `/api/posts/${postId}/retweet`,
         type: "POST",
         success: (postData) => {
-            // WORK HERE MISSING ACTIVE CLASS :( ---------------
             button.find("span").text(postData.retweetUsers.length || "");
             if(postData.retweetUsers.includes(userLoggedIn._id)){
                 button.addClass("active");
@@ -102,6 +100,16 @@ $(document).on("click", ".retweetButton", function(event){
         }
     })
 
+
+});
+
+$(document).on("click", ".post", function(event){
+    var element = $(event.target)
+    var postId = getPostIdFromElement(element);
+
+    if(postId !== undefined && !element.is("button")){
+        window.location.href = '/posts/' + postId;
+    }
 
 });
 
@@ -154,6 +162,21 @@ function createPostHtml(postData){
         `;
     }
 
+    var replyFlag = "";
+    if(postData.replyTo){
+        if(!postData.replyTo._id){
+            return console.log("Reply to is not populated");
+        }else if(!postData.replyTo.postedBy._id){
+            return console.log("Posted by is not populated");
+        }
+
+        var replyToUsername = postData.replyTo.postedBy.username;
+        replyFlag = `<div class='replyFlag'>
+                        Replying to <a href='/profile/${replyToUsername}'>@${replyToUsername}</a>
+                    </div>`;
+
+    }
+
 
     return `
         <div class='post' data-id='${postData._id}'>
@@ -170,6 +193,7 @@ function createPostHtml(postData){
                         <span class='username'>@${postedBy.username}</span>
                         <span class='date'>${timestamp}</span>
                     </div>
+                    ${replyFlag}
                     <div class='postBody'>
                         <span>${postData.content}</span>
                     </div>
