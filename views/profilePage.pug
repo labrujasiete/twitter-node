@@ -1,0 +1,37 @@
+extends layouts/main-layout.pug
+
+block content
+    if !profileUser
+        span.errorMessage Please verify URL
+    else
+        .profileHeaderContainer
+            .coverPhotoContainer
+
+                .userImageContainer
+                    img(src=profileUser.profilePic, alt="User Profile Image")
+            .profileButtonsContainer
+                if profileUser._id != userLoggedIn._id
+                    a.profileButton(href=`/messages/${profileUser._id}`)
+                        i.fas.fa-envelope
+                    +createFollowButton(profileUser, true)
+            .userDetailsContainer
+                span.displayName #{profileUser.firstName} #{profileUser.lastName}
+                span.username @#{profileUser.username}
+                span.description #{profileUser.description}
+
+                .followerContainer
+                    a(href=`/profile/${profileUser.username}/following`)
+                        span.value #{0}
+                        span Following
+
+                .followerContainer
+                    a(href=`/profile/${profileUser.username}/followers`)
+                        span.value #{0}
+                        span Followers
+
+        .postsContainer
+
+        +createPostModals(userLoggedIn)
+
+block scripts
+    script(src="/js/profile.js")

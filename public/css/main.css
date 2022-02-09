@@ -3,6 +3,7 @@
     --blue: #1fa2f1;
     --light-blue: #d4edff;
     --notsolight-blue: #9bd1f9;
+    --blue-bg: rgba(212, 237,255, 0.6);
     --light-grey: rgb(230,236,240);
     --grey-text: rgb(101,119,134);
     --grey-text-trans: rgb(0,0,0,0.34);
@@ -84,7 +85,7 @@ nav a.blue{
     padding: 0 var(--spacing); 
     display: flex;
     align-items: center;
-    border-bottom: 1pc solid var(--light-grey);
+    border-bottom: 1px solid var(--light-grey);
     flex-shrink: 0;/* Safari Bug*/
 }
 
@@ -236,5 +237,64 @@ nav a.blue{
     color: var(--blue);
 }
 
+.post.largeFont .postBody,
+.post.largeFont .postFooter{
+    font-size: 23px;
+}
 
+.postContentContainer .header {
+    display: flex;
+}
 
+.postContentContainer .header .date {
+    flex: 1;
+}
+
+.errorMessage{
+    padding: var(--spacing);
+}
+
+.profileHeaderContainer .coverPhotoContainer{
+    height: 180px;
+    background-color: var(--blue);
+    position: relative;
+}
+
+.profileHeaderContainer .userImageContainer{
+    height: 132px;
+    width: 132px;
+    margin-left: var(--spacing);
+    position: absolute;
+    bottom: -66px;
+}
+
+.profileHeaderContainer .userImageContainer img{
+    border: 4px solid #fff;
+}
+
+.profileHeaderContainer .profileButtonsContainer{
+    text-align: right;
+    padding: var(--spacing);
+    min-height: (66px);
+}
+
+.profileButton,
+.followButton {
+    border: 1px solid var(--blue);
+    color: var(--blue);
+    font-weight: bold;
+    padding: 5px 15px;
+    border-radius: 60px;
+    display: inline-block;
+    margin-left: var(--spacing);
+}
+
+.profileButton:hover,
+.followButton:hover {
+    background-color: var(--blue-bg);
+}
+
+.followButton.following{
+    background-color: var(--blue);
+    color: #fff;
+}

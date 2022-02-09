@@ -1,8 +1,11 @@
+//POST API ROUTES
+
 const express = require('express');
 const app = express();
 //const middleware = require('../middleware');
 const router = express.Router();
 const bodyParser = require('body-parser');
+
 const User = require('../../schemas/UserSchema');
 const Post = require('../../schemas/PostSchema');
 
@@ -16,8 +19,20 @@ router.get("/", async(req, res, next) => {
 router.get("/:id", async(req, res, next) => {
     
     let postId = req.params.id;
-    var results = await getPost({ _id: postId });
-    results = results[0];
+
+    var postData = await getPost({ _id: postId });
+    postData = postData[0];
+    
+    let results = {
+        postData: postData
+    }
+    
+    if(postData.replyTo !== undefined){
+        results.replyTo = postData.replyTo;
+    }
+
+    results.replies = await getPost({ replyTo: postId })
+
     res.status(200).send(results);
     
 });
@@ -115,6 +130,15 @@ router.post("/:id/retweet", async(req, res, next) => {
 
     res.status(200).send(post)
 });
+
+router.delete("/:id", (req, res, next) => {
+    Post.findByIdAndDelete( req.params.id)
+    .then(()=> res.sendStatus(202))
+    .catch(error => {
+        console.log(error)
+        res.sendStatus(400)
+    })
+})
 
 async function getPost(filter){
 
