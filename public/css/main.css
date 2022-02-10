@@ -60,6 +60,10 @@ nav a:hover{
     border-radius: 50%;
 }
 
+.wrapper > .row {
+    margin: 0;
+}
+
 button{
     background-color: transparent;
     border: none;
@@ -275,7 +279,7 @@ nav a.blue{
 .profileHeaderContainer .profileButtonsContainer{
     text-align: right;
     padding: var(--spacing);
-    min-height: (66px);
+    min-height: 66px;
 }
 
 .profileButton,
@@ -297,4 +301,53 @@ nav a.blue{
 .followButton.following{
     background-color: var(--blue);
     color: #fff;
+}
+
+.userDetailsContainer{
+    display: flex;
+    flex-direction: column;
+    padding: 0 var(--spacing);
+}
+
+.followersContainer .value{
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.followersContainer span:not(.value){
+    color: var(--grey-text)
+}
+
+.followersContainer a{
+    margin-right: 15px;
+}
+
+.followersContainer a:hover{
+    border-bottom: 1px solid #000;
+}
+
+.tabsContainer{
+    display: flex;
+    border-bottom: 1px solid var(--light-grey);
+    flex-shrink: 0;
+}
+
+.tab{
+    flex: 1;
+    height: 52px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--grey-text);
+    font-weight: bold;
+}
+
+.tab.active{
+    color: var(--blue);
+    border-bottom: 2px solid var(--blue);
+}
+
+.tab:hover{
+    color: var(--blue);
+    background-color: var(--blue-bg);
 }

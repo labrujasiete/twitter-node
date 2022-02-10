@@ -136,6 +136,40 @@ $(document).on("click", ".post", function(event){
 
 });
 
+$(document).on("click", ".followButton", function(e){
+    let button = $(e.target)
+    let userId = button.data().user
+
+    $.ajax({
+        url: `/api/users/${userId}/follow`,
+        type: "PUT",
+        success: (data, status, xhr) => {
+            if(xhr.status == 404){
+                console.log("Error: User not found");
+                return;
+            }
+            
+            var difference = 1;
+            if(data.following && data.following.includes(userId)){
+                button.addClass("following");
+                button.text("Following")
+            }else{
+                button.removeClass("following");
+                button.text("Follow")
+                difference = -1;
+            }
+
+            let followersLabel = $("#followersValue");
+            if(followersLabel.length != 0){
+                let followersText = followersLabel.text()
+                followersText = parseInt(followersText)
+                followersLabel.text(followersText + difference)
+            }
+            
+        }
+    })
+})
+
 function getPostIdFromElement(element){
     var isRoot = element.hasClass("post")
     var rootElement = isRoot == true ? element : element.closest(".post")

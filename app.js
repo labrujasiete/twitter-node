@@ -32,6 +32,7 @@ const logoutRoute = require('./routes/logout');
 const profileRoute = require('./routes/profileRoutes');
 //API Routes
 const postApiRoute = require('./routes/api/posts');
+const usersApiRoute = require('./routes/api/users');
 
 //when user acces $ page it will be handle by $
 app.use('/login', loginRoute);
@@ -41,6 +42,7 @@ app.use('/profile', middleware.requireLogin, profileRoute);
 app.use('/logout', logoutRoute);
 
 app.use('/api/posts', postApiRoute);
+app.use('/api/users', usersApiRoute);
 
 
 app.get("/", middleware.requireLogin, (req, res, next) => {
