@@ -270,6 +270,10 @@ nav a.blue{
     margin-left: var(--spacing);
     position: absolute;
     bottom: -66px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .profileHeaderContainer .userImageContainer img{
@@ -350,4 +354,42 @@ nav a.blue{
 .tab:hover{
     color: var(--blue);
     background-color: var(--blue-bg);
+}
+
+.noResults{
+    padding: var(--spacing);
+}
+
+.resultsContainer{
+    display: flex;
+    flex-direction: column;
+}
+
+.resultsContainer .user{
+    padding: var(--spacing);
+    display: flex;
+    border-bottom: 1px solid var(--light-grey);
+}
+
+.user .userDetailsContainer{
+    flex: 1;
+    padding: 0 var(--spacing);
+}
+
+.profilePictureButton{
+    position: absolute;
+    font-size: 50px;
+    color: rgba(0, 0, 0, 0.6);
+    display: none;
+}
+
+.userImageContainer:hover .profilePictureButton{
+    display: block;
+    cursor: pointer;
+}
+
+#imagePreview{
+    width: 100%;
+    display: block;
+    max-width: 100%;
 }
