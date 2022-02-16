@@ -104,6 +104,71 @@ $("#filePhoto").change(function(){
     }
 })
 
+$("#coverPhoto").change(function(){
+    //let input = $(event.target)
+    if(this.files && this.files[0]){
+        let reader = new FileReader()
+        reader.onload = (e) => {
+            let image = document.getElementById("coverPreview")
+            image.src = e.target.result
+            if(cropper !== undefined){
+                cropper.destroy();
+            }
+            cropper = new Cropper(image, {
+                aspectRatio: 16 / 9,
+                background: false
+            });
+        }
+        reader.readAsDataURL(this.files[0])
+    }
+})
+
+$("#imageUploadButton").click(()=>{
+    let canvas = cropper.getCroppedCanvas();
+    if(canvas == null){
+        console.log("alert");
+        return;
+    }
+    canvas.toBlob((blob)=>{
+        let formData = new FormData();
+        formData.append("croppedImage", blob);
+
+        $.ajax({
+            url: "/api/users/profilePicture",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: () => {
+                location.reload();
+            }
+        })
+    });
+})
+
+$("#coverPhotoButton").click(()=>{
+    let canvas = cropper.getCroppedCanvas();
+    if(canvas == null){
+        console.log("alert");
+        return;
+    }
+    canvas.toBlob((blob)=>{
+        let formData = new FormData();
+        formData.append("croppedImage", blob);
+
+        $.ajax({
+            url: "/api/users/coverPhoto",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: () => {
+                location.reload();
+            }
+        })
+    });
+})
+
 $(document).on("click", ".likeButton", function(event){
     var button = $(event.target)
     var postId = getPostIdFromElement(button);
@@ -262,7 +327,10 @@ function createPostHtml(postData, largeFont = false){
 
     let buttons = "";
     if(postData.postedBy._id == userLoggedIn._id){
-        buttons = `<button data-id="${postData._id}" data-toggle="modal" data-target="#deletePostModal"><i class='fas fa-times'></i></button>`;
+        buttons = `
+            <button data-id="${postData._id}" data-toggle="modal" data-target="#confirmPinModal"><i class='fas fa-thumbtack'></i></button>
+            <button data-id="${postData._id}" data-toggle="modal" data-target="#deletePostModal"><i class='fas fa-times'></i></button>
+            `;
     }
 
 
