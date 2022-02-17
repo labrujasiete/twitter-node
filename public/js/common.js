@@ -67,6 +67,18 @@ $("#deletePostModal").on("show.bs.modal", (event)=>{
     $("#deletePostButton").data("id", postId);
 });
 
+$("#confirmPinModal").on("show.bs.modal", (event)=>{
+    var button = $(event.relatedTarget)
+    var postId = getPostIdFromElement(button);
+    $("#pinPostButton").data("id", postId);
+});
+
+$("#unpinModal").on("show.bs.modal", (event)=>{
+    var button = $(event.relatedTarget)
+    var postId = getPostIdFromElement(button);
+    $("#unpinPostButton").data("id", postId);
+});
+
 $("#deletePostButton").click((event)=>{
     let postId = $(event.target).data("id")
 
@@ -75,6 +87,40 @@ $("#deletePostButton").click((event)=>{
         type: "DELETE",
         success: (data, status, xhr) => {
             if(xhr.status != 202){
+                console.log("Could not delete the post");
+                return;
+            }
+            location.reload();
+        }
+    })
+})
+
+$("#pinPostButton").click((event)=>{
+    let postId = $(event.target).data("id")
+
+    $.ajax({
+        url: `/api/posts/${postId}`,
+        type: "PUT",
+        data: { pinned: true },
+        success: (data, status, xhr) => {
+            if(xhr.status != 204){
+                console.log("Could not delete the post");
+                return;
+            }
+            location.reload();
+        }
+    })
+})
+
+$("#unpinPostButton").click((event)=>{
+    let postId = $(event.target).data("id")
+
+    $.ajax({
+        url: `/api/posts/${postId}`,
+        type: "PUT",
+        data: { pinned: false },
+        success: (data, status, xhr) => {
+            if(xhr.status != 204){
                 console.log("Could not delete the post");
                 return;
             }
@@ -326,9 +372,17 @@ function createPostHtml(postData, largeFont = false){
     }
 
     let buttons = "";
+    let pinnedPostText = "";
     if(postData.postedBy._id == userLoggedIn._id){
+        let pinnedClass = "";
+        let dataTarget = "#confirmPinModal";
+        if(postData.pinned == true){
+            pinnedClass = "active";
+            dataTarget = "#unpinModal";
+            pinnedPostText = "<i class='fas fa-thumbtack'></i> <span>Pinned post</span>"
+        }
         buttons = `
-            <button data-id="${postData._id}" data-toggle="modal" data-target="#confirmPinModal"><i class='fas fa-thumbtack'></i></button>
+            <button class='pinButton ${pinnedClass}' data-id="${postData._id}" data-toggle="modal" data-target="${dataTarget}"><i class='fas fa-thumbtack'></i></button>
             <button data-id="${postData._id}" data-toggle="modal" data-target="#deletePostModal"><i class='fas fa-times'></i></button>
             `;
     }
@@ -344,6 +398,7 @@ function createPostHtml(postData, largeFont = false){
                     <img src='${postedBy.profilePic}'>
                 </div>
                 <div class='postContentContainer'>
+                    <div class='pinnedPostText'>${pinnedPostText}</div>
                     <div class='header'>
                         <a href='/profile/${postedBy.username}' class='displayName'>${displayName}</a>
                         <span class='username'>@${postedBy.username}</span>
@@ -456,7 +511,49 @@ function outputPostsWithReplies(results, container){
     }
 }
 
+function outputUsers(results, container){
+    container.html("");
 
+    results.forEach(result => {
+        let html = createUsersHtml(result, true)
+        container.append(html);
+    })
+
+    if(results.length == 0){
+        container.append("<span class='noResults'>No results found</span>")
+    }
+}
+
+function createUsersHtml(userData, showFollowButton){
+    let name = userData.firstName + " " + userData.lastName;
+    let isFollowing = userLoggedIn.following && userLoggedIn.following.includes(userData._id)
+    let text = isFollowing ? "Following" : "Follow"
+    let buttonClass = isFollowing ? "followButton following" : "followButton"
+    
+    let followButton = "";
+    if(showFollowButton && userLoggedIn._id != userData._id){
+        followButton = `
+            <div class='followButtonContainer'>
+                <button class='${buttonClass}' data-user='${userData._id}'>${text}</button>
+            </div>
+        `;
+    }
+    
+    return `
+        <div class='user'>
+            <div class='userImageContainer'>
+                <img src='${userData.profilePic}'>
+            </div>
+            <div class='userDetailsContainer'>
+                <div class='header'>
+                    <a href='/profile/${userData.username}'>${name}</a>
+                    <span class='username'>@${userData.username}</span>
+                </div>
+            </div>
+            ${followButton}
+        </div>
+        `;
+}
 
 
 
