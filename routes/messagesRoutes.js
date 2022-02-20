@@ -4,7 +4,9 @@ const middleware = require('../middleware');
 const router = express.Router();
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
 const User = require('../schemas/UserSchema');
+const Chat = require('../schemas/ChatSchema');
 
 router.get("/", (req, res, next) => {
     let payload = {
@@ -23,5 +25,65 @@ router.get("/new", (req, res, next) => {
     }
     res.status(200).render("newMessage", payload); 
 });
+
+router.get("/:chatId", async(req, res, next) => {
+
+    let userId = req.session.user._id;
+    let chatId = req.params.chatId;
+    let isValidId = mongoose.isValidObjectId(chatId)
+
+    let payload = {
+        pageTitle: "Chat",
+        userLoggedIn: req.session.user,
+        userLoggedInJS: JSON.stringify(req.session.user),
+    }
+
+    if(!isValidId){
+        payload.errorMessage = "chat does not exists";
+        return res.status(200).render("chatPage", payload);
+    }
+
+    let chat = await Chat.findOne({ _id: chatId, users: { $elemMatch: { $eq: userId } } })
+    .populate("users");
+
+    if(chat == null){
+        //Check chat id
+        let userFound = await User.findById(chatId);
+
+        if(userFound != null){
+            //get chat using user id
+            chat = await getChatByUserId(userFound._id, userId);
+        }
+    }
+
+    if(chat == null){
+        payload.errorMessage = "chat does not exists";
+    }else{
+        payload.chat = chat;
+    }
+
+    res.status(200).render("chatPage", payload); 
+});
+
+function getChatByUserId(userLoggedInId, otherUserId){
+    return Chat.findOneAndUpdate({
+        isGroupChat: false,
+        users: {
+            $size: 2,
+            $all: [
+                { $elemMatch: { $eq: mongoose.Types.ObjectId(userLoggedInId) } },
+                { $elemMatch: { $eq: mongoose.Types.ObjectId(otherUserId) } },
+            ]
+        }
+    },{
+        $setOnInsert: {
+            users: [userLoggedInId, otherUserId]
+        }
+    },{
+        new: true,
+        upsert: true
+    })
+    .populate("users");
+}
 
 module.exports = router;
