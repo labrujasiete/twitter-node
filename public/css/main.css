@@ -176,6 +176,7 @@ nav a.blue{
 .mainContentContainer{
     flex: 1;
     display: flex;
+    overflow-y: hidden;
 }
 
 .postContentContainer{
@@ -458,6 +459,7 @@ nav a.blue{
     flex-direction: column;
     min-height: 0;
     flex: 1;
+    flex-basis: 0;
 }
 
 .chatTitleBar{
@@ -679,6 +681,14 @@ nav a.blue{
     max-width: 55%;
 }
 
+.chatMessages .message.mine .messageContainer{
+    align-items: flex-end;
+}
+
+.chatMessages .message.theirs .messageContainer{
+    align-items: flex-start;
+}
+
 .chatMessages .message.mine{
     flex-direction: row-reverse;
 }
@@ -688,18 +698,76 @@ nav a.blue{
     color: #fff;
 }
 
+.chatMessages .message.mine.first .messageBody{
+    border-bottom-right-radius: 2px;
+}
+
+.chatMessages .message.mine:not(.first):not(.last) .messageBody{
+    border-bottom-right-radius: 2px;
+    border-top-right-radius: 2px;
+}
+
+.chatMessages .message.mine.last .messageBody{
+    border-bottom-right-radius: 18px;
+}
+
+.chatMessages .message.mine.last:not(.first) .messageBody{
+    border-top-right-radius: 2px;
+}
 
 
 
 
 
 
+.chatMessages .message.theirs.first .messageBody{
+    border-bottom-left-radius: 2px;
+}
 
+.chatMessages .message.theirs:not(.first):not(.last) .messageBody{
+    border-bottom-left-radius: 2px;
+    border-top-left-radius: 2px;
+}
 
+.chatMessages .message.theirs.last .messageBody{
+    border-bottom-left-radius: 18px;
+}
 
+.chatMessages .message.theirs.last:not(.first) .messageBody{
+    border-top-left-radius: 2px;
+}
 
+.senderName{
+    color: rgba(0, 0, 0, 0.4);
+}
 
+.chatMessages .imageContainer{
+    height: 24px;
+    width: 24px;
+    margin-right: 7px;
+}
 
+.chatMessages img{
+    height: 100%;
+    border-radius: 50%;
+    vertical-align: bottom;
+}
+
+.chatMessages .message .last{
+    margin-bottom: 5px;
+}
+
+.loadingSpinnerContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.loadingSpinnerContainer img{
+    width: 50%;
+    max-width: 250px;
+}
 
 
 
