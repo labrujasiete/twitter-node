@@ -98,6 +98,10 @@ nav a.blue{
     color: var(--blue);
 }
 
+ul{
+    margin: 0;
+}
+
 .titleContainer{
     height: 53px;
     padding: 0 var(--spacing); 
@@ -673,6 +677,19 @@ nav a.blue{
     padding: 6px 12px;
     border-radius: 18px;
     font-size: 14px;
+}
+
+.typingDots img{
+    height: 35px;
+    padding: 6px 12px;
+    border-radius: 18px;
+    font-size: 14px;
+}
+
+.typingDots{
+    padding: var(--spacing);
+    padding-bottom: 0;
+    display: none;
 }
 
 .chatMessages .message .messageContainer{

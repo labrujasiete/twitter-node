@@ -660,3 +660,11 @@ function getOtherChatUsers(users){
         return user._id != userLoggedIn._id;
     })
 }
+
+function messageReceived(newMessage){
+    if($(".chatContainer").length == 0){
+        //show popup
+    }else{
+        addChatMessageHtml(newMessage);
+    }
+}
