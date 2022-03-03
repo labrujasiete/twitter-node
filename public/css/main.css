@@ -786,6 +786,11 @@ ul{
     max-width: 250px;
 }
 
+.resultListItem.active{
+    background-color: var(--light-blue);
+}
+
+
 
 
 
