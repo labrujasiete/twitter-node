@@ -23,9 +23,11 @@ html(lang="en")
                     a(href="/search")
                         i.fas.fa-search 
                     a(href="/notifications")
-                        i.fas.fa-bell 
+                        i.fas.fa-bell
+                        span#notificationBadge
                     a(href="/messages")
                         i.fas.fa-envelope 
+                        span#messagesBadge
                     a(href="/profile")
                         i.fas.fa-user 
                     a(href="/logout")
@@ -37,6 +39,7 @@ html(lang="en")
                     block content
 
                 .d-none.d-md-block.col-2.col-lg-4
+        #notificationList
                     
 
 

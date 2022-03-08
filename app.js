@@ -76,7 +76,6 @@ app.get("/", middleware.requireLogin, (req, res, next) => {
 
 //The Socket is the Client
 io.on("connection", (socket)=>{
-    console.log("Socket.io ON");
 
     socket.on("setup", userData => {
         socket.join(userData._id);
@@ -86,6 +85,9 @@ io.on("connection", (socket)=>{
     socket.on("join room", room => socket.join(room))
     socket.on("typing", room => socket.in(room).emit("typing"))
     socket.on("stop typing", room => socket.in(room).emit("stop typing"))
+    socket.on("notification received", room => socket.in(room).emit("notification received"))
+
+    
     socket.on("new message", newMessage => {
         let chat = newMessage.chat;
         if(!chat.users) return console.log("chat.users not defined");
@@ -94,4 +96,8 @@ io.on("connection", (socket)=>{
             socket.in(user._id).emit("message received", newMessage);
         });
     });
+
+
+
+
 })

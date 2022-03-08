@@ -7,6 +7,7 @@ class Database {
     }
 
     connect(){
+        //mongoose.connect("mongodb+srv://bruja:Khamino7@twitterdb.jzf6e.mongodb.net/twitterDB?retryWrites=true&w=majority")
         mongoose.connect("mongodb+srv://bruja:Khamino7@twitterdb.jzf6e.mongodb.net/twitterDB?retryWrites=true&w=majority")
         .then(() => {
             console.log('MongoDB connection successful');
